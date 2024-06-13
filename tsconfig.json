@@ -17,6 +17,11 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
+    "paths": {
+      "storage-signal": [
+        "./dist/storage-signal"
+      ]
+    },
     "module": "ES2022",
     "useDefineForClassFields": false,
     "lib": [
