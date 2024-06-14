@@ -22,7 +22,7 @@ type ColorScheme = 'light' | 'dark';
         <header><code>preferredTheme2</code> signal</header>
         <code>preferredTheme2: {{ preferredTheme2() | json }}</code>
         <footer>
-          <button (click)="togglePreferredTheme()">Set white theme</button>
+          <button (click)="setLightTheme()">Set white theme</button>
         </footer>
       </article>
     </div>

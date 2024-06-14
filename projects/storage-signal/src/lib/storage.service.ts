@@ -22,7 +22,7 @@ export class StorageService {
       key: key,
       newValue: stringified,
       storageArea: this.#storage,
-    });
+      });
 
     window.dispatchEvent(storageEvent);
   }

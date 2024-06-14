@@ -14,7 +14,7 @@ export const fromStorage = <TValue>(storageKey: string): WritableSignal<TValue |
     untracked(() => storage.setItem(storageKey, updated));
   });
 
-  window.onstorage = (event: StorageEvent) => {
+  const storageEventListener = (event: StorageEvent) => {
     const isWatchedValueTargeted = event.key === storageKey;
     if (!isWatchedValueTargeted) {
       return;
@@ -29,7 +29,11 @@ export const fromStorage = <TValue>(storageKey: string): WritableSignal<TValue |
     };
   }
 
-  inject(DestroyRef).onDestroy(() => window.onstorage = null);
+  window.addEventListener('storage', storageEventListener)
+
+  inject(DestroyRef).onDestroy(() => {
+    window.removeEventListener('storage', storageEventListener)
+  });
 
   return fromStorageSignal;
 }
