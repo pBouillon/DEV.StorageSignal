@@ -29,10 +29,10 @@ export const fromStorage = <TValue>(storageKey: string): WritableSignal<TValue |
     };
   }
 
-  window.addEventListener('storage', storageEventListener)
+  window.addEventListener('storage', storageEventListener);
 
   inject(DestroyRef).onDestroy(() => {
-    window.removeEventListener('storage', storageEventListener)
+    window.removeEventListener('storage', storageEventListener);
   });
 
   return fromStorageSignal;
