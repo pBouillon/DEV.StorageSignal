@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { fromStorage } from '../../../storage-signal/src/lib/from-storage.function';
 import { JsonPipe } from '@angular/common';
 
+type ColorScheme = 'light' | 'dark';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -28,12 +30,12 @@ import { JsonPipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  readonly preferredTheme1 = fromStorage('preferred-theme');
+  readonly preferredTheme1 = fromStorage<ColorScheme>('preferred-theme');
   togglePreferredTheme(): void {
     this.preferredTheme1.update(current => current === 'light' ? 'dark' : 'light');
   }
 
-  readonly preferredTheme2 = fromStorage('preferred-theme');
+  readonly preferredTheme2 = fromStorage<ColorScheme>('preferred-theme');
   setLightTheme(): void {
     this.preferredTheme2.set('light');
   }
