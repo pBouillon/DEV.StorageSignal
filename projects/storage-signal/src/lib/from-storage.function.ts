@@ -2,28 +2,35 @@ import { effect, inject, signal, untracked, type WritableSignal } from '@angular
 
 import { StorageService } from './storage.service';
 
-export const fromStorage = <TValue>(key: string): WritableSignal<TValue | null> => {
+export const fromStorage = <TValue>(storageKey: string): WritableSignal<TValue | null> => {
   const storage = inject(StorageService);
 
-  const initialValue = storage.getItem<TValue>(key);
+  const initialValue = storage.getItem<TValue>(storageKey);
 
   const fromStorageSignal = signal<TValue | null>(initialValue);
 
   const writeToStorageOnUpdateEffect = effect(() => {
     const updated = fromStorageSignal();
-    untracked(() => storage.setItem(key, updated));
+    untracked(() => storage.setItem(storageKey, updated));
   });
 
   const updateSignalOnSignalWriteEffect = effect((onCleanup) => {
-    const intervalId = setInterval(() => {
-      const newValue = storage.getItem<TValue>(key);
+    window.onstorage = (event: StorageEvent) => {
+      const isWatchedValueTargeted = event.key === storageKey;
+      if (!isWatchedValueTargeted) {
+        return;
+      }
+
       const currentValue = fromStorageSignal();
+      const newValue = storage.getItem<TValue>(storageKey);
 
       const hasValueChanged = newValue !== currentValue;
-      if (hasValueChanged) fromStorageSignal.set(newValue);
-    }, 50)
+      if (hasValueChanged) {
+        fromStorageSignal.set(newValue);
+      }
+    }
 
-    onCleanup(() => clearInterval(intervalId));
+    onCleanup(() => window.onstorage = null);
   });
 
   return fromStorageSignal;

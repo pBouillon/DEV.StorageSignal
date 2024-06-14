@@ -17,6 +17,14 @@ export class StorageService {
   setItem<T>(key: string, value: T | null): void {
     const stringified = JSON.stringify(value);
     this.#storage.setItem(key, stringified);
+
+    const storageEvent = new StorageEvent('storage', {
+      key: key,
+      newValue: stringified,
+      storageArea: this.#storage,
+    });
+
+    window.dispatchEvent(storageEvent);
   }
 }
 
